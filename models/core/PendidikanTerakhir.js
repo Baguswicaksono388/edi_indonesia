@@ -18,6 +18,10 @@ module.exports = (sequelize, DataType) => {
         type: DataType.STRING(255),
         allowNull: false,
       },
+      jenjang_sekolah: {
+        type: DataType.STRING(255),
+        allowNull: false,
+      },
       tahun_mulai: {
         type: DataType.DATEONLY,
         allowNull: false,

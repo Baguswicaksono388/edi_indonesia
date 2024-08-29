@@ -1,5 +1,5 @@
 "use strict";
-const { where } = require("sequelize");
+const { Op } = require("sequelize");
 const {
   Biodata,
   PendidikanTerakhir,
@@ -72,6 +72,79 @@ exports.getDetailMe = async (req, res) => {
     return res.status(200).json({
       message: "Success",
       data,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+exports.searchBiodata = async (req, res) => {
+  try {
+    const search = req.body;
+    console.log(search);
+
+    Biodata.hasMany(PendidikanTerakhir, { foreignKey: "id_biodata" });
+    PendidikanTerakhir.belongsTo(Biodata, { foreignKey: "id_biodata" });
+
+    Biodata.hasMany(RiwayatPekerjaan, { foreignKey: "id_biodata" });
+    RiwayatPekerjaan.belongsTo(Biodata, { foreignKey: "id_biodata" });
+
+    Biodata.hasMany(RiwayatPelatihan, { foreignKey: "id_biodata" });
+    RiwayatPelatihan.belongsTo(Biodata, { foreignKey: "id_biodata" });
+
+    let wherePendidikan = { [Op.or]: [] };
+    let whereBiodata = { [Op.or]: [] };
+
+    for (const key in search) {
+      const nameColumn = key;
+      if (key === "jenjang_sekolah" || key === "nama_sekolah") {
+        wherePendidikan[Op.or].push({
+          [nameColumn]: { [Op.like]: `%${search[key]}%` },
+        });
+      } else if (key === "nama" || key === "alamat") {
+        whereBiodata[Op.or].push({
+          [nameColumn]: { [Op.like]: `%${search[key]}%` },
+        });
+      }
+    }
+
+    if (wherePendidikan[Op.or].length === 0) {
+      delete wherePendidikan[Op.or];
+    }
+
+    if (whereBiodata[Op.or].length === 0) {
+      delete whereBiodata[Op.or];
+    }
+
+    const biodatas = await Biodata.findAll({
+      attributes: ["id", "nama", "alamat", "tanggal_lahir", "tempat_lahir"],
+      include: [
+        {
+          model: PendidikanTerakhir,
+          where: wherePendidikan,
+        },
+        {
+          model: RiwayatPekerjaan,
+        },
+        {
+          model: RiwayatPelatihan,
+        },
+      ],
+      where: whereBiodata,
+    });
+
+    if (!biodatas.length) {
+      return res.status(404).json({
+        message: "Data not found",
+      });
+    }
+
+    return res.status(200).json({
+      message: "Success",
+      data: biodatas,
     });
   } catch (error) {
     console.log(error);

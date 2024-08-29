@@ -44,5 +44,6 @@ router.post(
 router.get("/biodata/me", auth.auth, biodataControllers.getDetailMe);
 router.get("/biodata/:id", auth.authAdmin, biodataControllers.getById);
 router.delete("/biodata/:id", auth.authAdmin, biodataControllers.delete);
+router.get("/biodata-search", auth.authAdmin, biodataControllers.searchBiodata);
 
 module.exports = router;

@@ -18,6 +18,10 @@ module.exports = {
         type: Sequelize.STRING(255),
         allowNull: false,
       },
+      jenjang_sekolah: {
+        type: Sequelize.STRING(255),
+        allowNull: false,
+      },
       tahun_mulai: {
         type: Sequelize.DATEONLY,
         allowNull: false,
