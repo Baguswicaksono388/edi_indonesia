@@ -24,12 +24,14 @@ const routesBiodata = require("./routes/biodata");
 const routesPendidikan = require("./routes/pendidikanTerakhir");
 const routesPekerjaan = require("./routes/riwayatPekerjaan");
 const routesPelatihan = require("./routes/riwayatPelatihan");
+const authGoogle = require("./routes/authGoogle");
 
 app.use("/v1/", routesAuth);
 app.use("/v1/", routesBiodata);
 app.use("/v1/", routesPendidikan);
 app.use("/v1/", routesPekerjaan);
 app.use("/v1/", routesPelatihan);
+app.use("/auth/", authGoogle);
 
 PORT = process.env.PORT;
 app.listen(PORT, () => {

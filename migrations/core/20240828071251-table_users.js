@@ -20,7 +20,7 @@ module.exports = {
       },
       password: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       level_users: {
         type: Sequelize.TINYINT(1),

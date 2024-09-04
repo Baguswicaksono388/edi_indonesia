@@ -29,6 +29,7 @@ exports.login = async (req, res) => {
           secret.secret,
           {
             algorithm: "HS256",
+            expiresIn: 60 * 60 * 1,
           }
         );
 

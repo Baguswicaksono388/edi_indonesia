@@ -20,7 +20,7 @@ module.exports = (sequelize, DataType) => {
       },
       password: {
         type: DataType.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       level_users: {
         type: DataType.TINYINT(1),
